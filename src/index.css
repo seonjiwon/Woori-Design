@@ -1,7 +1,8 @@
-/* TailwindCSS 코드 불러오기 */
+/* 1. TailwindCSS v4 불러오기 */
 @import "tailwindcss";
 @import "tailwind-scrollbar-hide/v4";
 
+/* 2. 기본 레이아웃 설정 */
 html,
 body,
 #root {
@@ -16,4 +17,24 @@ body,
 .scrollbar-hide {
   -ms-overflow-style: none; /* IE, Edge */
   scrollbar-width: none; /* Firefox */
+  @apply w-full h-full m-0 p-0;
+}
+
+/* 3. 카드 뒤집기(Flip)를 위한 3D 커스텀 클래스 추가 */
+/* Tailwind v4에서는 @import 아래에 일반 CSS처럼 작성하면 됩니다. */
+
+.perspective-1000 {
+  perspective: 1000px; /* 원근감 깊이 설정 */
+}
+
+.preserve-3d {
+  transform-style: preserve-3d; /* 자식 요소의 3D 공간 유지 */
+}
+
+.backface-hidden {
+  backface-visibility: hidden; /* 뒷면이 보일 때 앞면을 숨김 */
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg); /* Y축 기준 180도 회전 */
 }

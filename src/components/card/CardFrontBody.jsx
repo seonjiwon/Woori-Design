@@ -2,6 +2,7 @@ import React from "react";
 import FlipButton from "../ui/FlipButton";
 import CardBadge from "../ui/CardBadge";
 import CardInfo from "../ui/CardInfo";
+import CardName from "./CardName";
 
 const CardFrontBody = ({ cardInfo, handleFlip }) => {
     const { cardName, imageUrl, maskedCardNumber, linkedAccount } = cardInfo;
@@ -18,11 +19,7 @@ const CardFrontBody = ({ cardInfo, handleFlip }) => {
                 />
 
                 {/* [1] 중앙 상단 - 카드 이름 */}
-                <div className="absolute top-[25%] left-1/2 -translate-x-1/2 inline-flex bg-gray-100/90 py-2 px-6 rounded-full">
-                    <p className="font-bold text-xl text-black whitespace-nowrap">
-                        {cardName}
-                    </p>
-                </div>
+                <CardName cardName={cardName} />
 
                 {/* [2] 하단 좌측 - 카드 정보 */}
                 <CardInfo
@@ -32,12 +29,14 @@ const CardFrontBody = ({ cardInfo, handleFlip }) => {
 
                 {/* [3] 하단 우측 - 배지(교통/Master) */}
                 <div className="absolute bottom-4 right-4 space-y-1.5 flex flex-col items-end">
-                    {cardInfo.payon && (
-                        <CardBadge icon="/payon.svg" label="후불 교통카드" />
-                    )}
-                    {cardInfo.overseasPayment && (
-                        <CardBadge icon={`/${cardInfo.overseasPayment}.svg`} />
-                    )}
+                    {cardInfo.badges.map((badge) => {
+                        return (
+                            <CardBadge
+                                icon={`${badge}.svg`}
+                                label={badge === "payon" ? "후불 교통카드" : ""}
+                            />
+                        );
+                    })}
                 </div>
 
                 {/* [4] 뒤집기 버튼 - 이벤트 전파 방지 포함 */}

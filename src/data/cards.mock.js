@@ -15,8 +15,7 @@ export const mockCards = [
             maskedAccountNumber: "110-***-**233",
         },
 
-        payon: true,
-        overseasPayment: "master",
+        badges: ["payon", "master"],
     },
     {
         cardId: "card-002",
@@ -33,8 +32,7 @@ export const mockCards = [
             bankName: "국민",
             maskedAccountNumber: "012-***-**435",
         },
-        payon: false,
-        overseasPayment: "visa",
+        badges: ["payon", "visa"],
     },
     {
         cardId: "card-003",
@@ -51,7 +49,6 @@ export const mockCards = [
             bankName: "우리",
             maskedAccountNumber: "1002-***-**314",
         },
-        payon: true,
-        overseasPayment: "visa",
+        badges: ["payon", "visa"],
     },
 ];

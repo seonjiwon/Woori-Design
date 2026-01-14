@@ -1,4 +1,7 @@
+import "./index.css";
+
 export { default as BadgeList } from "./components/card/BadgeList";
+export { default as Card } from "./components/card/Card";
 export { default as CardBack } from "./components/card/CardBack";
 export { default as CardFrontBody } from "./components/card/CardFrontBody";
 export { default as CardHistoryItem } from "./components/card/CardHistoryItem";

@@ -1,10 +1,22 @@
 /* 1. TailwindCSS v4 불러오기 */
 @import "tailwindcss";
+@import "tailwind-scrollbar-hide/v4";
 
 /* 2. 기본 레이아웃 설정 */
 html,
 body,
 #root {
+  @apply w-full h-full;
+}
+
+/* 스크롤바 숨기기 */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE, Edge */
+  scrollbar-width: none; /* Firefox */
   @apply w-full h-full m-0 p-0;
 }
 

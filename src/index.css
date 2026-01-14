@@ -1,8 +1,19 @@
 /* TailwindCSS 코드 불러오기 */
 @import "tailwindcss";
+@import "tailwind-scrollbar-hide/v4";
 
 html,
 body,
 #root {
-    @apply w-full h-full;
+  @apply w-full h-full;
+}
+
+/* 스크롤바 숨기기 */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE, Edge */
+  scrollbar-width: none; /* Firefox */
 }

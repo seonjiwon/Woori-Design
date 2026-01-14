@@ -1,6 +1,7 @@
 import React from "react";
-import FlipButton from "./FlipButton";
-import CardBadge from "./CardBadge";
+import FlipButton from "../ui/FlipButton";
+import CardBadge from "../ui/CardBadge";
+import CardInfo from "../ui/CardInfo";
 
 const CardFrontBody = ({ cardInfo, handleFlip }) => {
     const { cardName, imageUrl, maskedCardNumber, linkedAccount } = cardInfo;
@@ -24,15 +25,10 @@ const CardFrontBody = ({ cardInfo, handleFlip }) => {
                 </div>
 
                 {/* [2] 하단 좌측 - 카드 정보 */}
-                <div className="absolute bottom-6 left-6">
-                    <div className="bg-white/90 text-black py-3 px-5 rounded shadow-lg">
-                        <p className="font-bold text-xs">{maskedCardNumber}</p>
-                        <p className="font-bold text-xs">
-                            연결 계좌 · {linkedAccount.bankName}{" "}
-                            {linkedAccount.maskedAccountNumber}
-                        </p>
-                    </div>
-                </div>
+                <CardInfo
+                    maskedCardNumber={maskedCardNumber}
+                    linkedAccount={linkedAccount}
+                />
 
                 {/* [3] 하단 우측 - 배지(교통/Master) */}
                 <div className="absolute bottom-4 right-4 space-y-1.5 flex flex-col items-end">

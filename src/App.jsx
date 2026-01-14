@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import DefaultLayout from "./layouts/DefaultLayout";
 import Card_Back from "./components/card/Card_Back";
 import CardFrontBody from "./components/card/CardFrontBody";
@@ -41,49 +41,49 @@ const dummyHistories = [
     type: "PAYMENT",
   },
   {
-    id: 5,
+    id: 6,
     merchantName: "GS25",
     time: "2026-01-12 00:18",
     price: 4200,
     type: "PAYMENT",
   },
   {
-    id: 5,
+    id: 7,
     merchantName: "GS25",
     time: "2026-01-12 00:18",
     price: 4200,
     type: "PAYMENT",
   },
   {
-    id: 5,
+    id: 8,
     merchantName: "GS25",
     time: "2026-01-12 00:18",
     price: 4200,
     type: "PAYMENT",
   },
   {
-    id: 5,
+    id: 9,
     merchantName: "GS25",
     time: "2026-01-12 00:18",
     price: 4200,
     type: "PAYMENT",
   },
   {
-    id: 5,
+    id: 10,
     merchantName: "GS25",
     time: "2026-01-12 00:18",
     price: 4200,
     type: "PAYMENT",
   },
   {
-    id: 5,
+    id: 11,
     merchantName: "GS25",
     time: "2026-01-12 00:18",
     price: 4200,
     type: "PAYMENT",
   },
   {
-    id: 5,
+    id: 12,
     merchantName: "GS25",
     time: "2026-01-12 00:18",
     price: 4200,
@@ -92,29 +92,105 @@ const dummyHistories = [
 ];
 
 function App() {
-  // 카드가 뒤집혔는지 상태 관리 (false: 앞면, true: 뒷면)
   const [isFlipped, setIsFlipped] = useState(false);
+  const [filterType, setFilterType] = useState("1개월");
+  const [isListOpen, setIsListOpen] = useState(false);
+  const [monthOffset, setMonthOffset] = useState(0);
 
-  // 뒤집기 함수
-  const handleFlip = () => setIsFlipped(!isFlipped);
+  // 조회설정을 위한 날짜 상태 (기본값: 오늘 기준)
+  const todayStr = new Date().toISOString().split("T")[0];
+  const [customStart, setCustomStart] = useState(todayStr);
+  const [customEnd, setCustomEnd] = useState(todayStr);
+
+  const { startDate, endDate, dateRangeStr, monthList } = useMemo(() => {
+    const now = new Date();
+    let start, end;
+
+    if (filterType === "1개월") {
+      start = new Date(now.getFullYear(), now.getMonth() + monthOffset, 1);
+      end = new Date(
+        now.getFullYear(),
+        now.getMonth() + monthOffset + 1,
+        0,
+        23,
+        59,
+        59
+      );
+    } else {
+      // 조회설정: 사용자가 입력한 날짜 사용
+      start = new Date(customStart);
+      start.setHours(0, 0, 0, 0);
+      end = new Date(customEnd);
+      end.setHours(23, 59, 59, 999);
+    }
+
+    const format = (d) =>
+      `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, "0")}.${String(
+        d.getDate()
+      ).padStart(2, "0")}`;
+
+    const mList = Array.from({ length: 6 }, (_, i) => {
+      const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+      return {
+        label: `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(
+          2,
+          "0"
+        )}`,
+        offset: -i,
+      };
+    });
+
+    return {
+      startDate: start,
+      endDate: end,
+      dateRangeStr: `${format(start)} ~ ${format(end)}`,
+      monthList: mList,
+    };
+  }, [filterType, monthOffset, customStart, customEnd]);
+
+  const filteredHistories = useMemo(() => {
+    return dummyHistories
+      .filter((h) => {
+        const hDate = new Date(h.time);
+        return hDate >= startDate && hDate <= endDate;
+      })
+      .sort((a, b) => new Date(b.time) - new Date(a.time));
+  }, [startDate, endDate]);
+
+  const totalUsageAmount = useMemo(() => {
+    const total = filteredHistories.reduce((acc, cur) => acc + cur.price, 0);
+    return total.toLocaleString() + "원";
+  }, [filteredHistories]);
 
   return (
     <DefaultLayout>
-      {/* 3D 원근감을 위한 컨테이너 */}
       <div className="perspective-1000 w-full flex justify-center py-10">
-        {/* 실제 뒤집히는 카드 몸체 */}
         <div
           className={`relative w-[400px] h-[600px] transition-transform duration-700 preserve-3d ${
             isFlipped ? "rotate-y-180" : ""
           }`}
         >
-          {/* [1. 카드 앞면] - 팀원 담당 파트가 들어올 곳 */}
-          <CardFrontBody handleFlip={handleFlip}></CardFrontBody>
-
-          {/* [2. 카드 뒷면] - 사용자님 담당 파트 */}
+          <CardFrontBody handleFlip={() => setIsFlipped(true)} />
           <div className="absolute inset-0 backface-hidden rotate-y-180">
-            <Card_Back totalUsage="1,250,000원" onFlip={handleFlip}>
-              <CardHistoryList histories={dummyHistories} />
+            <Card_Back
+              totalUsage={totalUsageAmount}
+              onFlip={() => setIsFlipped(false)}
+              filterType={filterType}
+              setFilterType={setFilterType}
+              dateRange={dateRangeStr}
+              isListOpen={isListOpen}
+              setIsListOpen={setIsListOpen}
+              monthList={monthList}
+              setMonthOffset={(offset) => {
+                setMonthOffset(offset);
+                setIsListOpen(false);
+              }}
+              customStart={customStart}
+              customEnd={customEnd}
+              setCustomStart={setCustomStart}
+              setCustomEnd={setCustomEnd}
+            >
+              <CardHistoryList histories={filteredHistories} />
             </Card_Back>
           </div>
         </div>
@@ -122,5 +198,4 @@ function App() {
     </DefaultLayout>
   );
 }
-
 export default App;

@@ -4,15 +4,12 @@ import Card from "./components/card/Card";
 import MobileLayout from "./layouts/MobileLayout";
 
 function App() {
-  return (
-    <MobileLayout>
-      {mockCards.map((card) => (
+    const card = mockCards[0];
+    return (
         <Card
-          selectedCard={card}
-          histories={mockHistoriesByCard[card.cardId]}
+            selectedCard={card}
+            histories={mockHistoriesByCard[card.cardId]}
         />
-      ))}
-    </MobileLayout>
-  );
+    );
 }
 export default App;

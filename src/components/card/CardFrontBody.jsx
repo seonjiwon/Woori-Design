@@ -1,4 +1,5 @@
 import React from "react";
+import FlipButton from "./FlipButton";
 
 const CardFrontBody = ({ cardInfo, handleFlip }) => {
   const { cardName, imageUrl, maskedCardNumber, linkedAccount } = cardInfo;
@@ -54,12 +55,7 @@ const CardFrontBody = ({ cardInfo, handleFlip }) => {
           </div>
         </div>
         {/* 뒤집기 버튼 */}
-        <button
-          onClick={handleFlip}
-          className="absolute top-4 right-4 text-white w-10 h-10 flex items-center justify-center z-10 hover:bg-[#134a5e] transition-colors"
-        >
-          🔄
-        </button>
+        <FlipButton onClick={handleFlip} />
       </div>
     </div>
   );

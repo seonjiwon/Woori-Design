@@ -21,3 +21,7 @@ src/
 
 
 ## 사용법
+### npm 설치
+```
+npm i 02_woori-component
+```
